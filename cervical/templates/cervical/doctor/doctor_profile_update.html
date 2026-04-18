@@ -1,0 +1,243 @@
+{% extends 'cervical/shared/base.html' %} {% load static %} {% block content %}
+
+<div class="update-profile-page">
+  <div class="update-container">
+    <div class="update-header">
+      <i class="fas fa-user-edit profile-icon"></i>
+      <h2 class="page-title">Edit Doctor Profile</h2>
+      <p class="page-subtitle">Update your professional information</p>
+    </div>
+
+    <form method="post" class="profile-form">
+      {% csrf_token %}
+      
+      <div class="form-grid">
+        {% for field in form %}
+        <div class="form-group {% if field.errors %}has-error{% endif %}">
+          <label for="{{ field.id_for_label }}" class="form-label">
+            {{ field.label }}
+            {% if field.field.required %}<span class="required">*</span>{% endif %}
+          </label>
+          {{ field }}
+          {% if field.errors %}
+            <div class="error-message">
+              {{ field.errors|first }}
+            </div>
+          {% endif %}
+          {% if field.help_text %}
+            <small class="help-text">{{ field.help_text }}</small>
+          {% endif %}
+        </div>
+        {% endfor %}
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary">
+          <i class="fas fa-save"></i> Save Changes
+        </button>
+        <a href="{% url 'doctor_profile' %}" class="btn btn-secondary">
+          <i class="fas fa-times"></i> Cancel
+        </a>
+      </div>
+    </form>
+  </div>
+</div>
+
+<style>
+  :root {
+    --color-bg-primary: #12121e;
+    --color-card-primary: #1e2536;
+    --color-card-secondary: #272f41;
+    --color-accent: #6366f1;
+    --color-accent-light: #818cf8;
+    --color-text: #e2e8f0;
+    --color-muted: #94a3b8;
+    --color-error: #ef4444;
+  }
+
+  body {
+    background-color: var(--color-bg-primary);
+    color: var(--color-text);
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  }
+
+  .update-profile-page {
+    padding: 40px;
+    max-width: 800px;
+    margin: 0 auto;
+    min-height: 100vh;
+  }
+
+  .update-container {
+    background-color: var(--color-card-primary);
+    border-radius: 16px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+    overflow: hidden;
+  }
+
+  .update-header {
+    background: linear-gradient(135deg, var(--color-card-secondary) 0%, var(--color-card-primary) 100%);
+    padding: 40px 30px;
+    text-align: center;
+    border-bottom: 3px solid var(--color-accent);
+  }
+
+  .profile-icon {
+    font-size: 3.5rem;
+    color: var(--color-accent-light);
+    margin-bottom: 15px;
+    display: block;
+  }
+
+  .page-title {
+    color: var(--color-text);
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+
+  .page-subtitle {
+    color: var(--color-muted);
+    font-size: 1rem;
+  }
+
+  .profile-form {
+    padding: 30px;
+  }
+
+  .form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 25px;
+    margin-bottom: 30px;
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .form-label {
+    color: var(--color-text);
+    font-weight: 600;
+    font-size: 0.95rem;
+  }
+
+  .required {
+    color: var(--color-error);
+    margin-left: 4px;
+  }
+
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    padding: 12px;
+    border: 2px solid var(--color-card-secondary);
+    border-radius: 8px;
+    background-color: var(--color-card-secondary);
+    color: var(--color-text);
+    font-size: 1rem;
+    transition: all 0.3s ease;
+  }
+
+  .form-group input:focus,
+  .form-group select:focus,
+  .form-group textarea:focus {
+    outline: none;
+    border-color: var(--color-accent);
+    background-color: var(--color-card-primary);
+    box-shadow: 0 0 10px rgba(99, 102, 241, 0.2);
+  }
+
+  .form-group.has-error input,
+  .form-group.has-error select {
+    border-color: var(--color-error);
+  }
+
+  .error-message {
+    color: var(--color-error);
+    font-size: 0.85rem;
+    margin-top: 4px;
+  }
+
+  .help-text {
+    color: var(--color-muted);
+    font-size: 0.85rem;
+  }
+
+  .form-actions {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .btn {
+    padding: 12px 28px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 1rem;
+  }
+
+  .btn-primary {
+    background-color: var(--color-accent);
+    color: white;
+    box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+  }
+
+  .btn-primary:hover {
+    background-color: var(--color-accent-light);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
+  }
+
+  .btn-secondary {
+    background-color: transparent;
+    color: var(--color-muted);
+    border: 2px solid var(--color-muted);
+  }
+
+  .btn-secondary:hover {
+    color: var(--color-accent-light);
+    border-color: var(--color-accent-light);
+    background-color: rgba(129, 140, 248, 0.1);
+  }
+
+  @media (max-width: 768px) {
+    .update-profile-page {
+      padding: 20px;
+    }
+
+    .update-header {
+      padding: 30px 20px;
+    }
+
+    .page-title {
+      font-size: 1.5rem;
+    }
+
+    .form-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .form-actions {
+      flex-direction: column;
+    }
+
+    .btn {
+      width: 100%;
+      justify-content: center;
+    }
+  }
+</style>
+
+{% endblock %}

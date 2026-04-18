@@ -1,0 +1,181 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>CervicalAI | Multimodal Decision Support</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="{% static 'cervical/css/styles.css' %}" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+    />
+    <style>
+      /* --- Dropdown Styles --- */
+      .user-dropdown {
+        position: relative;
+        display: inline-block;
+      }
+      .dropdown-btn {
+        /* Styled to look like a button but acts as a toggle */
+        background-color: var(--color-card, #183152);
+        color: var(--color-text, #eef2ff);
+        padding: 8px 15px;
+        font-size: 16px;
+        border: 2px solid var(--color-accent-dark);
+        border-radius: 6px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        display: flex;
+        align-items: center;
+        line-height: 1.5;
+      }
+      .dropdown-btn:hover {
+        background-color: var(--color-accent-dark);
+      }
+      .dropdown-btn i {
+        margin-right: 8px;
+      }
+      .dropdown-btn .fa-caret-down {
+        margin-left: 8px;
+        margin-right: 0;
+      }
+
+      .dropdown-content {
+        display: none;
+        position: absolute;
+        right: 0;
+        background-color: var(--color-card, #183152);
+        min-width: 200px;
+        box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.5);
+        z-index: 100;
+        border-radius: 6px;
+        border: 1px solid var(--color-accent-dark);
+        padding: 5px 0;
+        margin-top: 5px;
+      }
+
+      /* Active class to show the dropdown (controlled by JS) */
+      .user-dropdown.active .dropdown-content {
+        display: block;
+      }
+
+      .dropdown-content a {
+        color: var(--color-text, #eef2ff);
+        padding: 12px 16px;
+        text-decoration: none;
+        display: block;
+        text-align: left;
+        font-size: 14px;
+        box-shadow: none;
+        background: none;
+      }
+
+      .dropdown-content a:hover {
+        background-color: rgba(0, 188, 212, 0.1);
+        color: var(--color-accent);
+      }
+
+      .dropdown-content a i {
+        margin-right: 10px;
+        color: var(--color-accent-dark);
+      }
+
+      .dropdown-content .danger-link {
+        color: #ff6b6b;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        margin-top: 5px;
+        padding-top: 10px;
+      }
+      .dropdown-content .danger-link:hover {
+        background-color: rgba(255, 0, 0, 0.1);
+      }
+
+      /* Ensure nav links have gap */
+      .topbar .nav {
+        display: flex; /* Ensure the nav is a flex container */
+        align-items: center; /* Vertically align items */
+        gap: 15px;
+      }
+
+      /* Reset default styling if any */
+      .nav a,
+      .nav .user-dropdown {
+        display: block;
+      }
+      .nav .btn.danger {
+        /* Hiding the old static logout button */
+        display: none;
+      }
+      .nav .user {
+        /* Hiding the old static Hi, email tag */
+        display: none;
+      }
+    </style>
+  </head>
+
+  <body>
+    <header class="topbar">
+      <a href="{% url 'home' %}" class="brand" style="text-decoration: none; color: inherit;">🧠 CervicalAI</a>
+      <nav class="nav">
+        {% if user.is_authenticated %} {% if user.role == 'doctor' %}
+        <a href="{% url 'doctor_dashboard' %}" class="btn">Doctor Dashboard</a>
+        <a href="{% url 'doctor_predict' %}" class="btn primary">Predict</a>
+        <a href="{% url 'doctor_messages' %}" class="btn">💬 Messages</a>
+
+        {% elif user.role == 'patient' %}
+        <a href="{% url 'patient_dashboard' %}" class="btn">Dashboard</a>
+        {% endif %}
+
+        <div class="user-dropdown" id="profileDropdown">
+          <button class="dropdown-btn" onclick="toggleDropdown(event)">
+            <i class="fas fa-user-circle"></i>
+            {{ user.get_full_name|default:user.email }}
+            <i class="fas fa-caret-down"></i>
+          </button>
+
+          <div class="dropdown-content">
+            {% if user.role == 'patient' %}
+            <a href="{% url 'patient_profile' %}"><i class="fas fa-id-card-alt"></i> View Profile</a>
+            {% elif user.role == 'doctor' %}
+            <a href="{% url 'doctor_profile' %}"><i class="fas fa-id-card-alt"></i> My Profile</a>
+            {% endif %}
+            <a href="{% url 'logout' %}" class="danger-link"
+              ><i class="fas fa-sign-out-alt"></i> Logout</a
+            >
+          </div>
+        </div>
+
+        {% else %}
+        <a href="{% url 'about' %}" class="btn">About</a>
+        <a href="{% url 'login' %}" class="btn primary">Login</a>
+        {% endif %}
+      </nav>
+    </header>
+
+    <main class="container">{% block content %}{% endblock %}</main>
+
+    <footer class="footer">
+      <small
+        >© CervicalAI — Multimodal Cancer Detection with Explainable AI</small
+      >
+    </footer>
+
+    <script>
+      function toggleDropdown(event) {
+        event.stopPropagation();
+        const dropdown = document.getElementById("profileDropdown");
+        dropdown.classList.toggle("active");
+      }
+
+      document.addEventListener("click", function (event) {
+        const dropdown = document.getElementById("profileDropdown");
+        const isClickInside = dropdown.contains(event.target);
+
+        if (!isClickInside && dropdown.classList.contains("active")) {
+          dropdown.classList.remove("active");
+        }
+      });
+    </script>
+  </body>
+</html>

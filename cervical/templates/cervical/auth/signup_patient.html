@@ -1,0 +1,30 @@
+{% extends 'cervical/shared/base.html' %} {% block content %}
+<div class="container" id="container">
+  <div class="form-container sign-up">
+    <div class="registration-form">
+      <h1>Patient Sign Up</h1>
+      <p>Complete all fields for your secure profile.</p>
+      <form method="post">
+        {% csrf_token %} {% for field in form %}
+        <div class="form-field-wrapper">
+          {{ field }} {% if field.errors %}
+          <span style="color: #ff6b6b">{{ field.errors }}</span>
+          {% endif %}
+        </div>
+        {% endfor %}
+
+        <button type="submit">Register Patient Account</button>
+      </form>
+
+      <p style="margin-top: 20px; font-size: 13px; color: var(--color-muted)">
+        Already have an account?
+        <a
+          href="{% url 'login' %}"
+          style="color: var(--color-accent); font-weight: 600"
+          >Log in here</a
+        >
+      </p>
+    </div>
+  </div>
+</div>
+{% endblock %}

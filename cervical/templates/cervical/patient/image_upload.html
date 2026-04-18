@@ -1,0 +1,9 @@
+{% extends 'cervical/shared/base.html' %} {% block content %}
+<div class="card">
+  <h2>Upload Pap Smear Image</h2>
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %} {{ form.as_p }}
+    <button class="btn primary">Upload & Predict</button>
+  </form>
+</div>
+{% endblock %}

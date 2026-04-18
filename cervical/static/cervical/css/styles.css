@@ -1,0 +1,381 @@
+/* =========================
+    Root Variables & Global (Updated for modern, tech/hospital theme)
+    ========================= */
+:root {
+  --bg: #081a38; /* Deep dark blue */
+  --card: #122b50; /* Slightly lighter card background */
+  --accent: #00bcd4; /* Vibrant Cyan/Teal for hospital theme */
+  --accent-dark: #00a8b9;
+  --muted: #a7bed8;
+  --white: #eef2ff;
+}
+
+body {
+  font-family: Inter, system-ui, Arial;
+  margin: 0;
+  /* Updated gradient for deep blue, high-tech look */
+  background: linear-gradient(180deg, #07112a 0%, #061c40 100%);
+  color: var(--white);
+}
+
+/* =========================
+    Topbar & Layout
+    ========================= */
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background: rgba(0, 0, 0, 0.2);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+}
+
+.brand {
+  font-weight: 700;
+  font-size: 1.2rem;
+  color: var(--accent);
+}
+
+.container {
+  padding: 2rem;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+/* =========================
+    Cards & Panels (Updated Look)
+    ========================= */
+.card {
+  background: rgba(255, 255, 255, 0.03);
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 6px 30px rgba(0, 0, 0, 0.6);
+}
+
+.auth-card {
+  max-width: 420px;
+  margin: 4rem auto;
+  padding: 2rem 2.5rem;
+  background: var(--card);
+  border-radius: 16px; /* Slightly more rounded */
+  box-shadow: 0 12px 60px rgba(0, 0, 0, 0.7), 0 0 20px rgba(0, 188, 212, 0.1); /* Subtle cyan glow */
+  backdrop-filter: blur(10px);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.auth-card:hover {
+  transform: translateY(-4px); /* More pronounced lift */
+  box-shadow: 0 15px 70px rgba(0, 0, 0, 0.8), 0 0 30px rgba(0, 188, 212, 0.3);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 1.5rem;
+}
+
+.panel {
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 12px;
+  padding: 1rem;
+}
+
+.record {
+  padding: 0.6rem;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.02);
+  margin-bottom: 0.6rem;
+}
+
+.two-col {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+}
+
+/* =========================
+    Inputs, Textareas, Selects
+    ========================= */
+textarea,
+input,
+select {
+  width: 100%;
+  box-sizing: border-box; /* Prevent padding and border from exceeding 100% width */
+  padding: 0.8rem 1rem; /* Increased padding */
+  border-radius: 10px; /* Slightly more rounded */
+  background: rgba(255, 255, 255, 0.05); /* Lighter input background */
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: var(--white);
+  font-size: 1rem;
+  transition: border 0.3s ease, box-shadow 0.3s ease;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 8px var(--accent);
+  background: rgba(0, 188, 212, 0.05); /* Light accent fill on focus */
+  outline: none;
+}
+
+/* Fix dropdown option visibility in dark theme */
+select option {
+  background-color: #122b50 !important;
+  color: #ffffff !important;
+}
+
+/* =========================
+    Buttons
+    ========================= */
+.btn {
+  display: inline-block;
+  padding: 0.6rem 1rem;
+  border-radius: 10px;
+  text-decoration: none;
+  background: var(--card);
+  color: var(--white);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  cursor: pointer;
+  font-weight: 500;
+  transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+}
+
+.btn:hover {
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+    transform: translateY(-1px);
+}
+
+.btn.primary {
+  /* Updated gradient using new accent colors */
+  background: linear-gradient(90deg, var(--accent), var(--accent-dark));
+  border: none;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+.btn.primary:hover {
+  background: linear-gradient(90deg, #00d4ec, #008fa0);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 188, 212, 0.5); /* Stronger accent shadow on hover */
+}
+
+.btn.danger {
+  background: #ef4444;
+  border: none;
+}
+
+/* =========================
+    Auth Form Styling
+    ========================= */
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem; /* Increased spacing */
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  font-weight: 500;
+  margin-bottom: 0.4rem;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.form-group small {
+  font-size: 0.8rem;
+  color: var(--muted);
+  margin-top: 0.3rem;
+}
+
+/* =========================
+    Links and Footer Text
+    ========================= */
+.links {
+  text-align: center;
+  margin-top: 1.2rem;
+}
+
+.links a {
+  color: var(--accent);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.links a:hover {
+  color: #5eead4; /* Lighter cyan hover */
+  text-decoration: underline;
+}
+
+.link-accent {
+  color: var(--accent);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.link-accent:hover {
+  text-decoration: underline;
+}
+
+/* =========================
+    NEW: Dynamic Split Sign-up Links
+    ========================= */
+.signup-split-container {
+  display: flex;
+  justify-content: space-between;
+  gap: 1.5rem; /* Increased gap */
+  margin-top: 2.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(0, 188, 212, 0.2); /* Accent border for separation */
+}
+
+.split-link {
+  display: flex;
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem 0.5rem; /* Large touch target */
+  border-radius: 12px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--accent);
+  background: rgba(0, 188, 212, 0.05); /* Very light accent background */
+  border: 1px solid rgba(0, 188, 212, 0.5);
+  box-shadow: 0 0 15px rgba(0, 188, 212, 0.1);
+  /* The magic transition for the split effect */
+  transition: all 0.3s ease-out, transform 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+  text-align: center; /* Ensure text is centered */
+}
+
+.split-link:hover {
+  background: var(--accent);
+  color: var(--card); /* Dark text on hover for contrast */
+  box-shadow: 0 4px 25px rgba(0, 188, 212, 0.6);
+  border-color: var(--accent);
+}
+
+/* Visual Separation/Dynamic Hover Effect */
+/* Patient link moves left on hover */
+.signup-split-container .split-link:first-child:hover {
+    transform: translateX(-15px) scale(1.05);
+}
+/* Doctor link moves right on hover */
+.signup-split-container .split-link:last-child:hover {
+    transform: translateX(15px) scale(1.05);
+}
+
+/* Subtle motion on the container when a link is NOT hovered, creating more space */
+.signup-split-container:hover .split-link:first-child:not(:hover) {
+  transform: translateX(-5px);
+}
+.signup-split-container:hover .split-link:last-child:not(:hover) {
+  transform: translateX(5px);
+}
+
+
+/* =========================
+    Utility Spacing
+    ========================= */
+.mt-1 { margin-top: 0.5rem; }
+.mt-2 { margin-top: 1rem; }
+.mt-3 { margin-top: 1.5rem; }
+/* =========================
+    Dashboard Layout Styling
+    ========================= */
+.dashboard-container {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 1.5rem;
+  padding: 2rem;
+}
+
+.profile-panel {
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 12px;
+  padding: 1.5rem;
+  text-align: left;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+
+.profile-panel h3 {
+  color: var(--accent);
+  margin-bottom: 1rem;
+  font-size: 1.3rem;
+}
+
+.profile-panel p {
+  color: var(--muted);
+  font-size: 0.95rem;
+  margin-bottom: 0.4rem;
+}
+
+.main-panel {
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.panel-header h2 {
+  color: var(--white);
+  font-size: 1.4rem;
+}
+
+.record {
+  background: rgba(255, 255, 255, 0.04);
+  padding: 1rem 1.2rem;
+  border-radius: 10px;
+  margin-bottom: 1rem;
+  transition: transform 0.2s ease, box-shadow 0.3s ease;
+}
+
+.record:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 15px rgba(0, 188, 212, 0.3); /* Use new accent shadow */
+}
+
+.record h4 {
+  margin: 0 0 0.5rem 0;
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.record p {
+  margin: 0.3rem 0;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.home-btn {
+  background: linear-gradient(90deg, #14b8a6, #0ea5e9);
+  color: white;
+  font-weight: 600;
+}
+
+.home-btn:hover {
+  background: linear-gradient(90deg, #0ea5e9, #2563eb);
+}
+
+/* Responsive */
+@media (max-width: 800px) {
+  .dashboard-container {
+    grid-template-columns: 1fr;
+  }
+  .panel-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.8rem;
+  }
+}

@@ -1,0 +1,28 @@
+❌ Flower client failed to start/connect: <_MultiThreadedRendezvous of RPC that terminated with:
+	status = StatusCode.UNAVAILABLE
+	details = "IOCP/Socket: Connection reset (An existing connection was forcibly closed by the remote host.
+ -- 10054)"
+	debug_error_string = "UNKNOWN:Error received from peer  {grpc_status:14, grpc_message:"IOCP/Socket: Connection reset (An existing connection was forcibly closed by the remote host.\r\n -- 10054)"}"
+>
+Traceback (most recent call last):
+  File "C:\cervical_ai\federated\fed_client.py", line 140, in train_locally
+    fl.client.start_client(
+  File "C:\Users\aroma\AppData\Local\Programs\Python\Python312\Lib\site-packages\flwr\compat\client\app.py", line 183, in start_client
+    start_client_internal(
+  File "C:\Users\aroma\AppData\Local\Programs\Python\Python312\Lib\site-packages\flwr\compat\client\app.py", line 394, in start_client_internal
+    message = receive()
+              ^^^^^^^^^
+  File "C:\Users\aroma\AppData\Local\Programs\Python\Python312\Lib\site-packages\flwr\compat\client\grpc_client\connection.py", line 142, in receive
+    proto = next(server_message_iterator)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\aroma\AppData\Local\Programs\Python\Python312\Lib\site-packages\grpc\_channel.py", line 543, in __next__
+    return self._next()
+           ^^^^^^^^^^^^
+  File "C:\Users\aroma\AppData\Local\Programs\Python\Python312\Lib\site-packages\grpc\_channel.py", line 972, in _next
+    raise self
+grpc._channel._MultiThreadedRendezvous: <_MultiThreadedRendezvous of RPC that terminated with:
+	status = StatusCode.UNAVAILABLE
+	details = "IOCP/Socket: Connection reset (An existing connection was forcibly closed by the remote host.
+ -- 10054)"
+	debug_error_string = "UNKNOWN:Error received from peer  {grpc_status:14, grpc_message:"IOCP/Socket: Connection reset (An existing connection was forcibly closed by the remote host.\r\n -- 10054)"}"
+>

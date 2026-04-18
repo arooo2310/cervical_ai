@@ -1,0 +1,229 @@
+{% extends 'cervical/shared/base.html' %} {% load static %} {% block content %}
+
+<div class="doctor-predict-page">
+  <div class="panel">
+    <h2 class="section-title">
+      <i class="fas fa-microscope"></i> New Prediction Entry
+    </h2>
+    <p class="muted-text">
+      Select a patient or create a new one, then enter the latest clinical and
+      Pap smear data to generate a new multimodal risk prediction.
+    </p>
+
+    <form
+      method="post"
+      enctype="multipart/form-data"
+      class="prediction-form-grid"
+    >
+      {% csrf_token %}
+
+      <div class="patient-chooser-tabs">
+        <button
+          type="button"
+          class="tab-link active"
+          id="existing-tab-btn"
+          onclick="showPatientTab('existing')"
+        >
+          <i class="fas fa-user-check"></i> Select Existing Patient
+        </button>
+        <button
+          type="button"
+          class="tab-link"
+          id="new-tab-btn"
+          onclick="showPatientTab('new')"
+        >
+          <i class="fas fa-user-plus"></i> Create New Patient
+        </button>
+      </div>
+
+      <div class="card patient-selector-block">
+        <div id="existing-patient-tab" class="patient-tab-content active">
+          <h3>Select Existing Patient</h3>
+          <div class="form-group">
+            <label for="patient-select">Choose Patient:</label>
+            <select name="patient_select" id="patient-select">
+              <option value="">--- Select an Existing Patient ---</option>
+              {% for p in patients %}
+              <option value="{{ p.id }}">
+                {{ p.user.get_full_name|default:p.user.email }} (ID: {{ p.id }})
+              </option>
+              {% empty %}
+              <option disabled>No patients available.</option>
+              {% endfor %}
+            </select>
+          </div>
+        </div>
+
+        <div
+          id="new-patient-tab"
+          class="patient-tab-content"
+          style="display: none"
+        >
+          <h3>New Patient Details</h3>
+          <div class="new-patient-form-fields">{{ new_patient_form.as_p }}</div>
+          <div class="info-box success">
+            <p>
+              <i class="fas fa-info-circle"></i> Note: A temporary patient
+              profile will be created for the prediction. They can use the
+              created email/username and "Forgot Password" to set a password
+              later.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="card data-entry-block">
+        <h3>
+          <i class="fas fa-notes-medical"></i> Clinical Data & Pap Smear Image
+          (Required for Prediction)
+        </h3>
+        <div class="form-fields">{{ prediction_form.as_p }}</div>
+      </div>
+
+      <div class="full-width-submit">
+        <button type="submit" class="btn primary large-btn">
+          <i class="fas fa-calculator"></i> Run Multimodal Prediction
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<style>
+  /* Add basic styling if needed, assuming styles are in static/cervical/css/styles.css */
+  /* Minimal styles for tab functionality visibility */
+  .patient-chooser-tabs {
+    display: flex;
+    margin-bottom: 20px;
+  }
+
+  .tab-link {
+    background: var(--color-input-bg);
+    border: 1px solid var(--color-input-border);
+    padding: 10px 15px;
+    cursor: pointer;
+    color: var(--color-muted);
+    font-weight: 600;
+    transition: color 0.3s, background-color 0.3s;
+    margin-right: 10px;
+    border-radius: 5px 5px 0 0;
+  }
+
+  .tab-link.active {
+    background-color: var(--color-card);
+    color: var(--color-accent);
+    border-bottom-color: var(--color-card);
+  }
+
+  .patient-selector-block {
+    grid-column: 1 / 2;
+    padding: 25px;
+    background-color: var(--color-card);
+    border-radius: 0 5px 5px 5px;
+    margin-top: -20px; /* Overlap with tabs */
+    border-top: 5px solid var(--color-accent);
+  }
+
+  .data-entry-block {
+    padding: 25px;
+    background-color: var(--color-card);
+    border-radius: 5px;
+  }
+
+  .prediction-form-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .info-box.success {
+    background-color: rgba(100, 255, 100, 0.1);
+    border-left: 3px solid #64ff64;
+    padding: 15px;
+    border-radius: 5px;
+    margin-top: 20px;
+  }
+
+  .info-box.success p {
+    color: #64ff64;
+    font-size: 0.9rem;
+    margin: 0;
+  }
+
+  .full-width-submit {
+    grid-column: 1 / 2;
+    text-align: center;
+    margin-top: 20px;
+  }
+
+  .large-btn {
+    padding: 15px 60px;
+    font-size: 14px;
+  }
+</style>
+
+<script>
+  function showPatientTab(tabName) {
+    // Elements
+    const existingTabBtn = document.getElementById("existing-tab-btn");
+    const newTabBtn = document.getElementById("new-tab-btn");
+    const existingContent = document.getElementById("existing-patient-tab");
+    const newContent = document.getElementById("new-patient-tab");
+    const patientSelect = document.getElementById("patient-select");
+    const newPatientFields = newContent.querySelectorAll("input, select");
+
+    // Reset all
+    existingTabBtn.classList.remove("active");
+    newTabBtn.classList.remove("active");
+    existingContent.style.display = "none";
+    newContent.style.display = "none";
+
+    // Apply styles and validation rules based on selected tab
+    if (tabName === "existing") {
+      existingTabBtn.classList.add("active");
+      existingContent.style.display = "block";
+
+      // Validation: Existing patient selector is required
+      patientSelect.required = true;
+      // Validation: New patient fields are NOT required
+      newPatientFields.forEach((field) => {
+        field.required = false;
+        // Important: clear values to prevent accidental submission with old data
+        if (field.type !== "submit" && field.type !== "button") {
+          field.value = "";
+        }
+      });
+    } else if (tabName === "new") {
+      newTabBtn.classList.add("active");
+      newContent.style.display = "block";
+
+      // Validation: Existing patient selector is NOT required
+      patientSelect.required = false;
+      // Validation: New patient fields ARE required (except optional ones, handled by form definition)
+      newPatientFields.forEach((field) => {
+        // Only set required if the field in the DoctorNewPatientForm should be required (all are in this case, except hospital/optional fields in the model)
+        if (field.name.startsWith("new-") && field.name !== "new-hospital") {
+          field.required = true;
+        }
+      });
+      // Clear selected option in existing selector
+      patientSelect.value = "";
+    }
+  }
+
+  // Initialize the tab view on page load
+  document.addEventListener("DOMContentLoaded", () => {
+    // Check if there are form errors, and if so, try to preserve the tab state
+    const isNewPatientError = document
+      .getElementById("new-patient-tab")
+      .querySelector(".errorlist, .alert-danger");
+
+    if (isNewPatientError) {
+      showPatientTab("new");
+    } else {
+      showPatientTab("existing");
+    }
+  });
+</script>
+
+{% endblock %}

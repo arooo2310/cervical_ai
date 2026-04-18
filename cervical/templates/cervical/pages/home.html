@@ -1,0 +1,14 @@
+{% extends 'cervical/shared/base.html' %}
+
+{% block content %}
+<div class="card" style="text-align: center; max-width: 800px; margin: 4rem auto; padding: 3rem; background-color: var(--color-card, #183152); border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.3);">
+    <h1 style="color: var(--color-accent, #00BCD4); margin-bottom: 2rem; font-size: 2.8rem;">Welcome to CervicalAI</h1>
+    <p style="font-size: 1.25rem; line-height: 1.7; color: var(--color-text, #eef2ff); margin-bottom: 2.5rem;">
+        CervicalAI is an intelligent diagnostic decision support system designed to assist medical professionals and empower patients in assessing the risk of cervical cancer. By utilizing multimodal machine learning across clinical and demographic features, we bridge the gap between raw medical data and clinical interpretation with Explainable AI.
+    </p>
+    <div style="display: flex; justify-content: center; gap: 20px;">
+        <a href="{% url 'login' %}" class="btn primary" style="font-size: 1.2rem; padding: 12px 30px;">Login / Get Started</a>
+        <a href="{% url 'about' %}" class="btn" style="font-size: 1.2rem; padding: 12px 30px;">Read More</a>
+    </div>
+</div>
+{% endblock %}

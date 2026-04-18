@@ -1,0 +1,89 @@
+{% extends 'cervical/shared/base.html' %} {% block content %}
+
+<div class="container" id="container">
+  <!-- ---------------- ROLE CHOOSER ---------------- -->
+  <div class="role-chooser" id="role-chooser-view">
+    <h1>Select Your Role</h1>
+    <p>
+      Choose your account type to proceed with the secure registration process.
+    </p>
+    <div class="role-button-container">
+      <div
+        class="role-button patient-link"
+        onclick="showRegistration('patient')"
+      >
+        <i class="fas fa-user-injured"></i> Sign Up as Patient
+      </div>
+      <div class="role-button doctor-link" onclick="showRegistration('doctor')">
+        <i class="fas fa-user-md"></i> Sign Up as Doctor
+      </div>
+    </div>
+    <p style="margin-top: 30px; font-size: 14px; color: var(--color-muted)">
+      Already have an account?
+      <a
+        href="{% url 'login' %}"
+        style="color: var(--color-accent); font-weight: 600"
+        >Log in here</a
+      >
+    </p>
+  </div>
+
+  <!-- ---------------- PATIENT SIGNUP FORM ---------------- -->
+  <div
+    class="registration-form"
+    id="patient-registration-view"
+    style="display: none"
+  >
+    <button class="btn-back" onclick="showRegistration('chooser')">
+      <i class="fas fa-arrow-left"></i> Back
+    </button>
+    <form method="post" action="{% url 'signup_patient' %}">
+      {% csrf_token %}
+      <h1>Patient Sign Up</h1>
+      {{ patient_form.as_p }}
+      <button type="submit">Register Patient Account</button>
+    </form>
+  </div>
+
+  <!-- ---------------- DOCTOR SIGNUP FORM ---------------- -->
+  <div
+    class="registration-form"
+    id="doctor-registration-view"
+    style="display: none"
+  >
+    <button class="btn-back" onclick="showRegistration('chooser')">
+      <i class="fas fa-arrow-left"></i> Back
+    </button>
+    <form method="post" action="{% url 'signup_doctor' %}">
+      {% csrf_token %}
+      <h1>Doctor Sign Up</h1>
+      {{ doctor_form.as_p }}
+      <button type="submit">Register Doctor Account</button>
+    </form>
+  </div>
+</div>
+
+<script>
+  const roleChooserView = document.getElementById("role-chooser-view");
+  const patientRegView = document.getElementById("patient-registration-view");
+  const doctorRegView = document.getElementById("doctor-registration-view");
+
+  function showRegistration(view) {
+    roleChooserView.style.display = "none";
+    patientRegView.style.display = "none";
+    doctorRegView.style.display = "none";
+
+    if (view === "chooser") {
+      roleChooserView.style.display = "flex";
+    } else if (view === "patient") {
+      patientRegView.style.display = "flex";
+    } else if (view === "doctor") {
+      doctorRegView.style.display = "flex";
+    }
+  }
+
+  // Initialize default view
+  showRegistration("chooser");
+</script>
+
+{% endblock %}

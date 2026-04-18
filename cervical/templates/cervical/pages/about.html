@@ -1,0 +1,33 @@
+{% extends 'cervical/shared/base.html' %}
+
+{% block content %}
+<div class="card" style="max-width: 900px; margin: 3rem auto; padding: 3rem; background-color: var(--color-card, #183152); border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.3);">
+    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem; border-bottom: 1px solid var(--color-accent-dark, #2b4b7c); padding-bottom: 1.5rem;">
+        <div style="display: flex; align-items: center;">
+            <a href="{% url 'home' %}" style="color: var(--color-accent, #00BCD4); font-size: 1.8rem; text-decoration: none; margin-right: 35px; transition: color 0.3s;" title="Back to Home" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='var(--color-accent)'">
+                <i class="fas fa-home"></i>
+            </a>
+            <h1 style="color: var(--color-accent, #00BCD4); margin: 0; font-size: 2.5rem;">About CervicalAI</h1>
+        </div>
+    </div>
+
+    <h2 style="color: #ffffff; margin-top: 2rem; margin-bottom: 1rem; font-size: 1.8rem;">Understanding Cervical Cancer</h2>
+    <p style="font-size: 1.15rem; line-height: 1.7; color: var(--color-text, #eef2ff); margin-bottom: 1.5rem;">
+        Cervical cancer is a type of cancer that occurs in the cells of the cervix — the lower part of the uterus that connects to the vagina. Various strains of the human papillomavirus (HPV), a sexually transmitted infection, play a primary role in causing most cervical cancer. While the body's immune system typically prevents the virus from doing harm, the virus can sometimes survive for years, contributing to the process that causes some cervical cells to become cancerous.
+    </p>
+
+    <h2 style="color: #ffffff; margin-top: 2.5rem; margin-bottom: 1rem; font-size: 1.8rem;">The Importance of Early Screening</h2>
+    <p style="font-size: 1.15rem; line-height: 1.7; color: var(--color-text, #eef2ff); margin-bottom: 1.5rem;">
+        Cervical cancer is highly preventable and curable if detected early. Regular screening tests, such as the Pap smear and HPV testing, can locate abnormal cells in the cervix before they develop into cancer. Routine screening significantly reduces the risk of developing cervical cancer and increases the chances of successful treatment.
+    </p>
+
+    <h2 style="color: #ffffff; margin-top: 2.5rem; margin-bottom: 1rem; font-size: 1.8rem;">How CervicalAI Helps</h2>
+    <p style="font-size: 1.15rem; line-height: 1.7; color: var(--color-text, #eef2ff); margin-bottom: 1.5rem;">
+        Our platform integrates advanced Machine Learning algorithms to process a patient's clinical, demographic, and lifestyle features (e.g., age, smoking pack-years, sexual history, STDs, and previous diagnostics). By analyzing these critical data points, the model estimates the personalized probability of high-risk outcomes.
+    </p>
+    <p style="font-size: 1.15rem; line-height: 1.7; color: var(--color-text, #eef2ff); margin-bottom: 1.5rem;">
+        This tool empowers doctors with an AI-driven "second opinion" and uses <strong>Explainable AI (SHAP)</strong> to visualize exactly <em>why</em> a patient might be at risk, ensuring complete transparency in every assessment.
+    </p>
+
+</div>
+{% endblock %}

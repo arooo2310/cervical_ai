@@ -1,0 +1,211 @@
+{% extends 'cervical/shared/base.html' %} {% load static %} {% block content %}
+<div class="container my-5">
+  <header class="mb-4">
+    <h2>Patient Analysis Details</h2>
+    <p class="text-muted">
+      Analysis performed on: **{{ rec.created_at|date:"M. d, Y, h:i a" }}**
+    </p>
+  </header>
+
+  <div class="row g-4 three-col-layout">
+    <div class="col-lg-4">
+      <div class="card shadow-sm h-100">
+        <div class="card-header bg-primary text-white">
+          <h4 class="mb-0">Clinical Data & Summary</h4>
+        </div>
+        <div class="card-body">
+          <h5 class="mb-3">Prediction Summary</h5>
+          <p class="lead">
+            Clinical Prediction:
+            <span
+              class="badge {% if rec.clinical_pred_label == 'High' %}bg-danger{% else %}bg-success{% endif %}"
+            >
+              {{ rec.clinical_pred_label }}
+            </span>
+          </p>
+          <p> <strong> Risk Score: {{ rec.clinical_risk_score|floatformat:10 }} <strong> </p>
+
+          <hr class="my-4" />
+
+          <h5>Fused Model Result 🎯</h5>
+          <p class="lead">Final Prediction:
+            <span class="badge {% if rec.fused_label == 'High' %}bg-danger{% else %}bg-success{% endif %}">
+              {{ rec.fused_label }}
+            </span>
+          </p>
+          <p><strong>Fused Score: {{ rec.fused_score|floatformat:10 }}<strong></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-4">
+      <div class="card shadow-sm h-100">
+        <div class="card-header bg-primary text-white">
+          <h4 class="mb-0">Image Visualization & AI Explanation</h4>
+        </div>
+        <div class="card-body">
+          <h5>Original Pap Smear Image</h5>
+          {% if rec.image %}
+          <div class="image-container mb-4 text-center">
+            <img
+              src="{{ rec.image.url }}"
+              alt="Uploaded Pap Smear Image"
+              class="img-fluid rounded border p-1"
+              style="max-height: 250px"
+            />
+          </div>
+          {% else %}
+          <p class="text-danger">Image not available.</p>
+          {% endif %}
+
+          <hr class="my-4" />
+
+          <h5>Grad-CAM Visualization</h5>
+          {% if rec.gradcam_path %}
+          <figure class="figure text-center">
+            <img
+              src="{% static rec.gradcam_path %}"
+              alt="Grad-CAM Visualization"
+              class="figure-img img-fluid rounded border p-1"
+              style="max-height: 250px"
+            />
+            <figcaption class="figure-caption">
+              Visual explanation highlighting high-risk regions.
+            </figcaption>
+          </figure>
+          {% else %}
+          <p class="text-warning">
+            <i class="fas fa-exclamation-triangle"></i> No Grad-CAM visualization available.
+          </p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-4">
+      <div class="card shadow-sm h-100">
+        <div class="card-header bg-success text-white">
+          <h4 class="mb-0">Actions & Follow-up 🚀</h4>
+        </div>
+        <div class="card-body">
+          <h5 class="mb-3">SHAP Explanation (Clinical)</h5>
+          {% if rec.clinical_shap_path %}
+          <figure class="figure text-center">
+            <img
+              src="{% static rec.clinical_shap_path %}"
+              alt="Clinical SHAP Explanation Plot"
+              class="figure-img img-fluid rounded"
+              style="max-width: 100%; height: auto"
+            />
+            <figcaption class="figure-caption">
+              Feature importance explanation.
+            </figcaption>
+          </figure>
+          {% else %}
+          <p class="text-warning">
+            <i class="fas fa-exclamation-triangle"></i> No SHAP explanation
+            available.
+          </p>
+          {% endif %}
+
+          {% if rec.shap_explanation %}
+          <div class="mt-3 p-3 bg-light border rounded">
+            <h6 class="text-primary"><i class="fas fa-robot"></i> AI Explanation:</h6>
+            <!-- Container for Marked.js output -->
+            <div id="ai-explanation-content" class="mb-0 small text-muted"></div>
+            
+            <!-- Hidden raw content -->
+            <script id="raw-explanation" type="text/plain">
+{{ rec.shap_explanation }}
+            </script>
+            
+            <!-- Marked.js for parsing Markdown/HTML -->
+            <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+            <script>
+                document.addEventListener("DOMContentLoaded", function() {
+                    const rawContent = document.getElementById('raw-explanation').textContent;
+                    const container = document.getElementById('ai-explanation-content');
+                    // Configure marked to allow HTML (needed for <mark> tags if model uses them)
+                    // or standard markdown parsing.
+                    container.innerHTML = marked.parse(rawContent);
+                });
+            </script>
+          </div>
+          {% endif %}
+          
+          {% if user.role == 'patient' %}
+          <hr class="my-4" />
+          {% if rec.fused_label == 'High' or not rec.fused_label and rec.clinical_pred_label == 'High' %}
+          <div
+            class="alert alert-danger p-3 mb-4 d-flex justify-content-between align-items-center flex-wrap"
+          >
+            <span class="fw-bold me-3">⚠️ Recommend Referral:</span>
+            <form method="post" class="mt-2 mt-md-0">
+              {% csrf_token %}
+              <input type="hidden" name="action" value="refer" />
+              <button class="btn btn-danger btn-sm" type="submit">
+                Refer to Doctor
+              </button>
+            </form>
+          </div>
+          {% endif %}
+
+          
+          <h5 class="mb-3">Ask a Doubt</h5>
+          <form method="post">
+            {% csrf_token %}
+            <input type="hidden" name="action" value="ask_doubt" />
+            <textarea
+              name="message"
+              class="form-control mb-3"
+              rows="3"
+              placeholder="Describe your doubt or question..."
+            ></textarea>
+            <button class="btn btn-primary w-100" type="submit">
+              Send to Doctor
+            </button>
+          </form>
+          
+          <!-- Display Previous Doubts and Replies -->
+          {% if doubts %}
+          <hr class="my-4" />
+          <h5 class="mb-3">Your Questions & Replies</h5>
+          {% for doubt in doubts %}
+          <div class="doubt-card mb-3 p-3 border rounded {% if doubt.is_answered %}bg-light{% else %}bg-warning-subtle{% endif %}">
+            <p class="mb-2"><strong>Q:</strong> {{ doubt.question }}</p>
+            <small class="text-muted">Asked on {{ doubt.created_at|date:"M d, Y H:i" }}</small>
+            
+            {% if doubt.is_answered %}
+            <hr class="my-2" />
+            <p class="mb-2 text-success"><strong><i class="fas fa-reply"></i> Doctor's Reply:</strong></p>
+            <p class="mb-1">{{ doubt.answer }}</p>
+            <small class="text-muted">Replied on {{ doubt.answered_at|date:"M d, Y H:i" }}</small>
+            {% else %}
+            <p class="mt-2 mb-0"><span class="badge bg-warning">Waiting for reply...</span></p>
+            {% endif %}
+          </div>
+          {% endfor %}
+          {% endif %}
+          {% endif %}
+
+          {% if user.role == 'doctor' %}
+          <hr class="my-4" />
+          <h5 class="mb-3">Doctor Tools</h5>
+          <form method="post">
+            {% csrf_token %}
+            <button
+              class="btn btn-secondary w-100"
+              name="predict"
+              value="1"
+              type="submit"
+            >
+              <i class="fas fa-redo"></i> Re-run Prediction
+            </button>
+          </form>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

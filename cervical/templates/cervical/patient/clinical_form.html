@@ -1,0 +1,9 @@
+{% extends 'cervical/shared/base.html' %}{% block content %}
+<div class="card">
+  <h2>Enter Clinical Data</h2>
+  <form method="post">
+    {% csrf_token %} {{ form.as_p }}
+    <button class="btn primary">Submit</button>
+  </form>
+</div>
+{% endblock %}
